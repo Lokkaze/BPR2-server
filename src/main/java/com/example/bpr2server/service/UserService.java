@@ -1,0 +1,17 @@
+package com.example.bpr2server.service;
+
+import com.example.bpr2server.model.User;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public interface UserService {
+
+    List getUsers();
+    User getUserById(int userId);
+    String loginUser(String username, String password);
+    String addUser(User newUser);
+    void updateUser(User newUser);
+
+}
