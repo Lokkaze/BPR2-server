@@ -3,15 +3,16 @@ package com.example.bpr2server.controller;
 import com.example.bpr2server.model.User;
 import com.example.bpr2server.service.UserService;
 import com.example.bpr2server.service.serviceImpl.UserServiceImpl;
+import com.example.bpr2server.utils.JwtUtils;
+import com.example.bpr2server.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/user")
+@CrossOrigin
 public class UserController {
     @Autowired
     UserService userService;
@@ -30,14 +31,28 @@ public class UserController {
         return userService.getUserById(userId);
     }
 
-    @GetMapping("/login")
-    public String loginUser(String username, String password){
-        System.out.println("username: " + username);
-        System.out.println("password: " + password);
-        return userService.loginUser(username, password);
+    @PostMapping("/login")
+    public Result loginUser(@RequestBody User user){
+        System.out.println("username: " + user.getUsername());
+        System.out.println("password: " + user.getPassword());
+        String r = userService.loginUser(user.getUsername(), user.getPassword());
+        System.out.println(r);
+        if (r == "Login success")
+        {
+            String token = JwtUtils.generateToken(user.getUsername());
+            return Result.ok().data("token", token);
+        }
+        else return Result.error();
     }
 
-    @PostMapping("/user/add")
+    @GetMapping("/info")
+    public Result info(String token){
+        String username = JwtUtils.getClaimsByToken(token).getSubject();
+        String url = ""; //头像
+        return Result.ok().data("name", username).data("avatar", url);
+    }
+
+    @PostMapping("add")
     public User addUser(@RequestBody User newUser){
         System.out.println(newUser);
         String result = userService.addUser(newUser);
@@ -45,7 +60,7 @@ public class UserController {
         return userService.getUserById(newUser.getUserId());
     }
 
-    @PostMapping("/user/update")
+    @PostMapping("update")
     public User updateUser(@RequestBody User newUser){
         userService.updateUser(newUser);
         return userService.getUserById(newUser.getUserId());

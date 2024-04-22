@@ -38,12 +38,12 @@ public class UserServiceImpl implements UserService {
         userGet = userMapper.selectOne(queryWrapper);
         System.out.println("User get: " + userGet);
         if (userGet == null){
-            return "Cannot find user";
+            return "Cannot find user"; //Cannot find user
         }
         else if (password.equals(userGet.getPassword())){
-            return "Login success";
+            return "Login success"; //Login success
         }
-        else return "Login failure";
+        else return "Login failure"; //Login failure
 
     }
 
