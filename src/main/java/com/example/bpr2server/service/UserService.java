@@ -10,6 +10,7 @@ public interface UserService {
 
     List getUsers();
     User getUserById(int userId);
+    User getUserByUsername(String username);
     String loginUser(String username, String password);
     String addUser(User newUser);
     void updateUser(User newUser);

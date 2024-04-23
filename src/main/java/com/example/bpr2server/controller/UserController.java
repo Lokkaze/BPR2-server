@@ -45,11 +45,17 @@ public class UserController {
         else return Result.error();
     }
 
+    @GetMapping("/logout")
+    public Result logoutUser(){
+        return Result.ok();
+    }
+
     @GetMapping("/info")
     public Result info(String token){
         String username = JwtUtils.getClaimsByToken(token).getSubject();
+        User user = userService.getUserByUsername(username);
         String url = ""; //头像
-        return Result.ok().data("name", username).data("avatar", url);
+        return Result.ok().data("name", username).data("avatar", url).data("isTeacher", user.isTeacher());
     }
 
     @PostMapping("add")
