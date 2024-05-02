@@ -9,12 +9,12 @@ public class User {
     private String password;
     private boolean isTeacher;
 
-    public boolean isTeacher() {
+    public boolean getIsTeacher() {
         return isTeacher;
     }
 
-    public void setTeacher(boolean teacher) {
-        isTeacher = teacher;
+    public void setIsTeacher(boolean isTeacher) {
+        this.isTeacher = isTeacher;
     }
 
     public int getUserId() {
