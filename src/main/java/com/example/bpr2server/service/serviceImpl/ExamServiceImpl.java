@@ -13,6 +13,7 @@ import com.example.bpr2server.model.User;
 import com.example.bpr2server.model.UserExam;
 import com.example.bpr2server.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,19 +27,17 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     private ExamInfoMapper examInfoMapper;
 
-    @Autowired
-    private UserExamMapper userExamMapper;
-
-    @Autowired
-    private UserMapper userMapper;
-
     @Override
-    public IPage fetchExam(String username, int page, int limit) {
-
+    public IPage fetchExam(String username, int page, int limit, String title, String status) {
         Page<Exam> examPage = new Page<>(page, limit);
-
         QueryWrapper<Exam> queryWrapper = new QueryWrapper();
         queryWrapper.eq("username", username);
+        if (title != ""){
+            queryWrapper.like("title", title);
+        }
+        if (status != ""){
+            queryWrapper.eq("status", status);
+        }
         IPage iPage = examMapper.selectPage(examPage, queryWrapper);
         return iPage;
     }
@@ -46,7 +45,6 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public String addExam(Exam exam) {
         int i = examMapper.insertExam(exam);
-        System.out.println("Adding exam: " + exam);
         if (i > 0){
             ExamInfo info = new ExamInfo(exam.getExamId());
             examInfoMapper.insert(info);
@@ -69,22 +67,5 @@ public class ExamServiceImpl implements ExamService {
             return "Delete success";
         }
         return "Delete failure";
-    }
-
-    @Override
-    public ExamInfo fetchExamDetail(int examId) {
-        List<UserExam> userExamList = userExamMapper.selectByExamId(examId);
-        List<User> users = fetchStudentList(userExamList);
-        ExamInfo info = examInfoMapper.getExamInfo(examId);
-        info.setUsers(users);
-        return info;
-    }
-
-    List<User> fetchStudentList(List<UserExam> userExamList){
-        List<User> userList = new ArrayList<>();
-        for (UserExam item : userExamList){
-            userList.add(userMapper.selectByUserId(item.getUserId()));
-        }
-        return userList;
     }
 }

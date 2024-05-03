@@ -9,9 +9,8 @@ import java.util.List;
 
 @Service
 public interface ExamService {
-    IPage fetchExam(String username, int page, int limit);
+    IPage fetchExam(String username, int page, int limit, String title, String status);
     String addExam(Exam exam);
     Exam updateExam(Exam exam);
     String deleteExam(int examId);
-    ExamInfo fetchExamDetail(int examId);
 }

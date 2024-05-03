@@ -17,6 +17,8 @@ public class ExamInfo {
         this.examId = examId;
     }
 
+    public ExamInfo() {}
+
     public int getExamId() {
         return examId;
     }

@@ -18,15 +18,18 @@ public class ExamController {
     ExamService examService;
 
     @GetMapping("/list")
-    public Result fetchExam(String username, int page, int limit){
-        IPage list = examService.fetchExam(username, page, limit);
+    public Result fetchExam(String username, int page, int limit, String title, String status){
+        IPage list = examService.fetchExam(username, page, limit, title, status);
         return Result.ok().data("list", list);
     }
 
     @PostMapping("/create")
     public Result createExam(@RequestBody Exam exam){
-        examService.addExam(exam);
-        return Result.ok();
+        String result = examService.addExam(exam);
+        if (result == "Add success"){
+            return Result.ok().data("result", result);
+        }
+        else return Result.error().data("result", result);
     }
 
     @PostMapping("/update")
@@ -40,11 +43,5 @@ public class ExamController {
         String result = examService.deleteExam(examId);
         System.out.println(result);
         return Result.ok();
-    }
-
-    @GetMapping("/detail")
-    public Result fetchExamDetail(int examId){
-        ExamInfo info = examService.fetchExamDetail(examId);
-        return Result.ok().data("info", info);
     }
 }
