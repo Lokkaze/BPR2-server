@@ -51,14 +51,18 @@ public class ExamInfoServiceImpl implements ExamInfoService {
 
     @Override
     public String updateExamDetail(ExamInfo examInfo) {
+
+        //examInfoUpdate
         QueryWrapper<ExamInfo> examInfoQueryWrapper = new QueryWrapper();
         examInfoQueryWrapper.eq("exam_id", examInfo.getExamId());
         int examInfoUpdate = examInfoMapper.update(examInfo, examInfoQueryWrapper);
 
+        //examUpdate
         QueryWrapper<Exam> examQueryWrapper = new QueryWrapper();
         examQueryWrapper.eq("exam_id", examInfo.getExam().getExamId());
         int examUpdate = examMapper.update(examInfo.getExam(), examQueryWrapper);
 
+        //userExamUpdate
         int userExamUpdate = 0;
         QueryWrapper<UserExam> userExamQueryWrapper = new QueryWrapper();
         userExamQueryWrapper.eq("exam_id", examInfo.getExamId());
