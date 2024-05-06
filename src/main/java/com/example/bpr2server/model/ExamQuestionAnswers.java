@@ -8,6 +8,8 @@ public class ExamQuestionAnswers {
     private int questionId;
     private String content;
 
+    private int answerId;
+
     public ExamQuestionAnswers() {
     }
 
@@ -41,6 +43,14 @@ public class ExamQuestionAnswers {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getAnswerId() {
+        return answerId;
+    }
+
+    public void setAnswerId(int answerId) {
+        this.answerId = answerId;
     }
 
     @Override
