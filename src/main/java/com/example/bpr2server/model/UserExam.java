@@ -8,12 +8,14 @@ import java.util.Objects;
 public class UserExam {
     private int examId;
     private int userId;
+    private String UserExamStatus;
     @TableField(exist = false)
     private List<User> users; //students
 
     public UserExam(int examId, int userId) {
         this.examId = examId;
         this.userId = userId;
+        this.UserExamStatus = "Unsubmitted";
     }
 
     public UserExam() {}
@@ -40,6 +42,14 @@ public class UserExam {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public String getUserExamStatus() {
+        return UserExamStatus;
+    }
+
+    public void setUserExamStatus(String userExamStatus) {
+        UserExamStatus = userExamStatus;
     }
 
     @Override

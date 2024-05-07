@@ -55,7 +55,7 @@ public class UserController {
         String username = JwtUtils.getClaimsByToken(token).getSubject();
         User user = userService.getUserByUsername(username);
         String url = ""; //头像
-        return Result.ok().data("name", username).data("avatar", url).data("isTeacher", user.getIsTeacher());
+        return Result.ok().data("name", username).data("avatar", url).data("isTeacher", user.getIsTeacher()).data("userId", user.getUserId());
     }
 
     @PostMapping("add")

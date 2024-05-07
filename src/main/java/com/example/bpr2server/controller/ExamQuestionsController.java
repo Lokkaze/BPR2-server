@@ -1,6 +1,7 @@
 package com.example.bpr2server.controller;
 
 import com.example.bpr2server.model.ExamQuestions;
+import com.example.bpr2server.model.StudentAnswer;
 import com.example.bpr2server.service.ExamQuestionsService;
 import com.example.bpr2server.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,11 @@ public class ExamQuestionsController {
             return Result.ok().data("result", result);
         }
         else return Result.error().data("result", result);
+    }
+
+    @PostMapping("/submit")
+    public Result submitAnswers(@RequestBody List<StudentAnswer> studentAnswerList){
+        String result = examQuestionsService.submitAnswers(studentAnswerList);
+        return Result.ok().data("result", result);
     }
 }

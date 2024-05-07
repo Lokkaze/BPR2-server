@@ -120,5 +120,8 @@ public class ExamInfoServiceImpl implements ExamInfoService {
         return iPage;
     }
 
-
+    @Override
+    public List<UserExam> fetchUserExamList(int examId) {
+        return userExamMapper.selectByExamId(examId);
+    }
 }

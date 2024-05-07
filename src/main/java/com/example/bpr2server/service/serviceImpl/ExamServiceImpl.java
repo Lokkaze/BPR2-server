@@ -27,18 +27,43 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     private ExamInfoMapper examInfoMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private UserExamMapper userExamMapper;
+
     @Override
     public IPage fetchExam(String username, int page, int limit, String title, String status) {
+        //isTeacher
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper();
+        userQueryWrapper.eq("username",username);
+        User user = userMapper.selectOne(userQueryWrapper);
+
         Page<Exam> examPage = new Page<>(page, limit);
-        QueryWrapper<Exam> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("username", username);
+        QueryWrapper<Exam> examQueryWrapper = new QueryWrapper();
+
+        if (user.getIsTeacher()){
+            examQueryWrapper.eq("username", username);
+        }
+        else {
+            QueryWrapper<UserExam> userExamQueryWrapper = new QueryWrapper();
+            userExamQueryWrapper.eq("user_id", user.getUserId());
+            List<UserExam> userExamList = userExamMapper.selectList(userExamQueryWrapper);
+            List<Integer> examIdList = new ArrayList<>();
+            for (UserExam item : userExamList){
+                examIdList.add(item.getExamId());
+            }
+            examQueryWrapper.in("exam_id", examIdList);
+        }
+
         if (title != ""){
-            queryWrapper.like("title", title);
+            examQueryWrapper.like("title", title);
         }
         if (status != ""){
-            queryWrapper.eq("status", status);
+            examQueryWrapper.eq("status", status);
         }
-        IPage iPage = examMapper.selectPage(examPage, queryWrapper);
+        IPage iPage = examMapper.selectPage(examPage, examQueryWrapper);
         return iPage;
     }
 

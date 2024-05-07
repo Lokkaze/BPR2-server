@@ -2,10 +2,13 @@ package com.example.bpr2server.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.bpr2server.model.ExamInfo;
+import com.example.bpr2server.model.UserExam;
 import com.example.bpr2server.service.ExamInfoService;
 import com.example.bpr2server.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/exam/detail")
@@ -17,7 +20,8 @@ public class ExamInfoController {
     @GetMapping("")
     public Result fetchExamDetail(int examId){
         ExamInfo info = examInfoService.fetchExamDetail(examId);
-        return Result.ok().data("info", info);
+        List<UserExam> userExamList = examInfoService.fetchUserExamList(examId);
+        return Result.ok().data("info", info).data("userExam", userExamList);
     }
 
     @PostMapping("/edit")

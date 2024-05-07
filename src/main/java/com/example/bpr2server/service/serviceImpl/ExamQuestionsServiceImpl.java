@@ -3,8 +3,10 @@ package com.example.bpr2server.service.serviceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.bpr2server.mapper.ExamQuestionAnswersMapper;
 import com.example.bpr2server.mapper.ExamQuestionsMapper;
+import com.example.bpr2server.mapper.StudentAnswerMapper;
 import com.example.bpr2server.model.ExamQuestionAnswers;
 import com.example.bpr2server.model.ExamQuestions;
+import com.example.bpr2server.model.StudentAnswer;
 import com.example.bpr2server.service.ExamQuestionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsService {
     ExamQuestionsMapper examQuestionsMapper;
     @Autowired
     ExamQuestionAnswersMapper examQuestionAnswersMapper;
+    @Autowired
+    StudentAnswerMapper studentAnswerMapper;
 
     @Override
     public List<ExamQuestions> fetchExamQuestions(int examId) {
@@ -94,5 +98,18 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsService {
 //            return "Update success";
 //        }
 //        else return "Update failure";
+    }
+
+    @Override
+    public String submitAnswers(List<StudentAnswer> studentAnswerList) {
+        QueryWrapper<StudentAnswer> studentAnswerQueryWrapper = new QueryWrapper();
+        studentAnswerQueryWrapper.eq("exam_id", studentAnswerList.get(0).getExamId());
+        studentAnswerQueryWrapper.eq("user_id", studentAnswerList.get(0).getUserId());
+        studentAnswerMapper.delete(studentAnswerQueryWrapper);
+
+        for (StudentAnswer item: studentAnswerList){
+            studentAnswerMapper.insert(item);
+        }
+        return "Submit success";
     }
 }
