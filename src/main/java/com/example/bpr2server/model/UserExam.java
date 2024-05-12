@@ -18,6 +18,11 @@ public class UserExam {
         this.UserExamStatus = "Unsubmitted";
     }
 
+    public UserExam(int examId, int userId, String userExamStatus) {
+        this.examId = examId;
+        this.userId = userId;
+        this.UserExamStatus = userExamStatus;
+    }
     public UserExam() {}
 
     public int getExamId() {

@@ -39,4 +39,10 @@ public class ExamInfoController {
         return Result.ok().data("list", list);
     }
 
+    @GetMapping("/streamList")
+    public Result fetchStreamList(int examId){
+        List<UserExam> userExamList = examInfoService.fetchUserExamList(examId);
+        return Result.ok().data("list", userExamList);
+    }
+
 }

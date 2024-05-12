@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.bpr2server.mapper.ExamQuestionAnswersMapper;
 import com.example.bpr2server.mapper.ExamQuestionsMapper;
 import com.example.bpr2server.mapper.StudentAnswerMapper;
+import com.example.bpr2server.mapper.UserExamMapper;
 import com.example.bpr2server.model.ExamQuestionAnswers;
 import com.example.bpr2server.model.ExamQuestions;
 import com.example.bpr2server.model.StudentAnswer;
+import com.example.bpr2server.model.UserExam;
 import com.example.bpr2server.service.ExamQuestionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsService {
     ExamQuestionAnswersMapper examQuestionAnswersMapper;
     @Autowired
     StudentAnswerMapper studentAnswerMapper;
+    @Autowired
+    UserExamMapper userExamMapper;
 
     @Override
     public List<ExamQuestions> fetchExamQuestions(int examId) {
@@ -110,6 +114,13 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsService {
         for (StudentAnswer item: studentAnswerList){
             studentAnswerMapper.insert(item);
         }
+
+        QueryWrapper<UserExam> userExamQueryWrapper = new QueryWrapper();
+        userExamQueryWrapper.eq("exam_id", studentAnswerList.get(0).getExamId());
+        userExamQueryWrapper.eq("user_id", studentAnswerList.get(0).getUserId());
+        UserExam userExam = new UserExam(studentAnswerList.get(0).getExamId(), studentAnswerList.get(0).getUserId(), "Submitted");
+        userExamMapper.update(userExam, userExamQueryWrapper);
+
         return "Submit success";
     }
 }
