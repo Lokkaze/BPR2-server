@@ -53,11 +53,10 @@ public class UserController {
     public Result info(String token){
         String username = JwtUtils.getClaimsByToken(token).getSubject();
         User user = userService.getUserByUsername(username);
-        String url = ""; //头像
-        return Result.ok().data("name", username).data("avatar", url).data("isTeacher", user.getIsTeacher()).data("userId", user.getUserId());
+        return Result.ok().data("name", username).data("avatar", user.getAvatar()).data("isTeacher", user.getIsTeacher()).data("userId", user.getUserId());
     }
 
-    @PostMapping("add")
+    @PostMapping("/add")
     public User addUser(@RequestBody User newUser){
         System.out.println(newUser);
         String result = userService.addUser(newUser);
@@ -65,15 +64,21 @@ public class UserController {
         return userService.getUserById(newUser.getUserId());
     }
 
-    @PostMapping("update")
-    public User updateUser(@RequestBody User newUser){
-        userService.updateUser(newUser);
-        return userService.getUserById(newUser.getUserId());
+    @PostMapping("/update")
+    public Result updateUser(@RequestBody User newUser){
+        String result = userService.updateUser(newUser);
+        return Result.ok().data("result", result);
     }
 
     @GetMapping("/username")
     public Result fetchUsername(int userId) {
         String username = userService.fetchUsername(userId);
         return Result.ok().data("username", username);
+    }
+
+    @PostMapping("/password")
+    public Result changePassword(@RequestBody User newUser) {
+        String result = userService.changePassword(newUser);
+        return Result.ok().data("result", result);
     }
 }

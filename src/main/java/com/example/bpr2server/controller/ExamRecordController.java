@@ -37,8 +37,8 @@ public class ExamRecordController {
     }
 
     @PostMapping("/upload/photo")
-    public Result uploadPhoto(int userId, MultipartFile photo){
-        examRecordsService.uploadPhoto(userId, photo);
+    public Result uploadPhoto(int userId, MultipartFile file){
+        examRecordsService.uploadPhoto(userId, file);
 
         return Result.ok();
     }

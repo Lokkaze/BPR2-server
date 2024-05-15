@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.bpr2server.mapper.ExamCheatMapper;
 import com.example.bpr2server.mapper.ExamRecordsMapper;
 import com.example.bpr2server.mapper.UserExamMapper;
+import com.example.bpr2server.mapper.UserMapper;
 import com.example.bpr2server.model.ExamCheat;
 import com.example.bpr2server.model.ExamRecords;
+import com.example.bpr2server.model.User;
 import com.example.bpr2server.model.UserExam;
 import com.example.bpr2server.service.ExamRecordsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ public class ExamRecordsServiceImpl implements ExamRecordsService {
     ExamCheatMapper examCheatMapper;
     @Autowired
     UserExamMapper userExamMapper;
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public ExamRecords fetchExamRecord(int userId, int examId) {
@@ -60,9 +64,16 @@ public class ExamRecordsServiceImpl implements ExamRecordsService {
         }
         try {
             photo.transferTo(destFile);
+
+            QueryWrapper<User> userQueryWrapper = new QueryWrapper();
+            userQueryWrapper.eq("user_id", userId);
+            User user = userMapper.selectOne(userQueryWrapper);
+            user.setAvatar("/upload/"+userId+".jpg");
+            userMapper.update(user, userQueryWrapper);
+
             return "Upload success";
         } catch (IOException e) {
-            return null;
+            return "Upload failure";
         }
     }
 
@@ -73,7 +84,6 @@ public class ExamRecordsServiceImpl implements ExamRecordsService {
         userExamQueryWrapper.eq("user_id", examCheat.getUserId());
         userExamQueryWrapper.eq("exam_id", examCheat.getExamId());
         String status = userExamMapper.selectOne(userExamQueryWrapper).getUserExamStatus();
-        System.out.println("==============================================="+status);
         if (!status.equals("cheating detected")) {
             UserExam suspectedStudent = new UserExam(examCheat.getExamId(), examCheat.getUserId(), "suspected of cheating");
             update = userExamMapper.update(suspectedStudent, userExamQueryWrapper);

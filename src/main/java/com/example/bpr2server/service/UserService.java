@@ -13,6 +13,7 @@ public interface UserService {
     User getUserByUsername(String username);
     String loginUser(String username, String password);
     String addUser(User newUser);
-    void updateUser(User newUser);
+    String updateUser(User newUser);
     String fetchUsername(int userId);
+    String changePassword(User newUser);
 }

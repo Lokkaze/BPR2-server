@@ -66,19 +66,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User newUser) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("user_id",newUser.getUserId());
-        int i = userMapper.update(newUser, queryWrapper);
+    public String updateUser(User newUser) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper();
+        userQueryWrapper.eq("user_id",newUser.getUserId());
+
+        int i = userMapper.update(newUser, userQueryWrapper);
         if (i > 0){
-            System.out.println("Update success");
+            return "Update success";
         }
-        else System.out.println("Update failure");
+        else return "Update failure";
     }
 
     @Override
     public String fetchUsername(int userId) {
         User user = userMapper.selectByUserId(userId);
         return user.getUsername();
+    }
+
+    @Override
+    public String changePassword(User newUser) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper();
+        userQueryWrapper.eq("user_id",newUser.getUserId());
+
+        User user = userMapper.selectOne(userQueryWrapper);
+        user.setPassword(newUser.getPassword());
+
+        int i = userMapper.update(user, userQueryWrapper);
+
+        if (i > 0){
+            return "Update success";
+        }
+        else return "Update failure";
     }
 }

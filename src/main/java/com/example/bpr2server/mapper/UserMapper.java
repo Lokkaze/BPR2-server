@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-    @Select("select user_id, username, is_teacher from user where user_id = #{userId}")
+    @Select("select user_id, username, is_teacher, avatar from user where user_id = #{userId}")
     User selectByUserId(int userId);
 
     @Select("select username from user where user_id = #{userId}")
