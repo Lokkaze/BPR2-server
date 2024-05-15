@@ -11,4 +11,5 @@ public interface ExamQuestionsService {
     List<ExamQuestions> fetchExamQuestions(int examId);
     String updateExamQuestions(int examId, List<ExamQuestions> examQuestions);
     String submitAnswers(List<StudentAnswer> studentAnswerList);
+    String checkStatus(int userId, int examId);
 }

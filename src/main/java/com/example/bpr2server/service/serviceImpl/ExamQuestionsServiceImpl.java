@@ -123,4 +123,14 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsService {
 
         return "Submit success";
     }
+
+    @Override
+    public String checkStatus(int userId, int examId) {
+        QueryWrapper<UserExam> userExamQueryWrapper = new QueryWrapper();
+        userExamQueryWrapper.eq("user_id", userId);
+        userExamQueryWrapper.eq("exam_id", examId);
+
+        String status = userExamMapper.selectOne(userExamQueryWrapper).getUserExamStatus();
+        return status;
+    }
 }

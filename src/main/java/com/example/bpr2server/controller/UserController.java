@@ -25,9 +25,8 @@ public class UserController {
     }
 
     @GetMapping("/getUserById")
-    public User getUser(int userId, String username){
+    public User getUser(int userId){
         System.out.println(userId);
-        System.out.println(username);
         return userService.getUserById(userId);
     }
 
@@ -70,5 +69,11 @@ public class UserController {
     public User updateUser(@RequestBody User newUser){
         userService.updateUser(newUser);
         return userService.getUserById(newUser.getUserId());
+    }
+
+    @GetMapping("/username")
+    public Result fetchUsername(int userId) {
+        String username = userService.fetchUsername(userId);
+        return Result.ok().data("username", username);
     }
 }

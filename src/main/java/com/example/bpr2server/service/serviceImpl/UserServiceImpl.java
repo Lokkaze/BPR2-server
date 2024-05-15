@@ -75,4 +75,10 @@ public class UserServiceImpl implements UserService {
         }
         else System.out.println("Update failure");
     }
+
+    @Override
+    public String fetchUsername(int userId) {
+        User user = userMapper.selectByUserId(userId);
+        return user.getUsername();
+    }
 }

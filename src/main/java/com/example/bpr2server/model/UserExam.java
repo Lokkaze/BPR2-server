@@ -11,6 +11,8 @@ public class UserExam {
     private String UserExamStatus;
     @TableField(exist = false)
     private List<User> users; //students
+    @TableField(exist = false)
+    private String username;
 
     public UserExam(int examId, int userId) {
         this.examId = examId;
@@ -55,6 +57,14 @@ public class UserExam {
 
     public void setUserExamStatus(String userExamStatus) {
         UserExamStatus = userExamStatus;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

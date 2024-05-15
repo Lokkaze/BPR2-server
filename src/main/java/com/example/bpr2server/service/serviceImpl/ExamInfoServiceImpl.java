@@ -124,4 +124,16 @@ public class ExamInfoServiceImpl implements ExamInfoService {
     public List<UserExam> fetchUserExamList(int examId) {
         return userExamMapper.selectByExamId(examId);
     }
+
+    @Override
+    public String confirmCheat(int userId, int examId) {
+        QueryWrapper<UserExam> userExamQueryWrapper = new QueryWrapper();
+        userExamQueryWrapper.eq("user_id", userId);
+        userExamQueryWrapper.eq("exam_id", examId);
+        UserExam cheatStudent = new UserExam(examId, userId, "cheating detected");
+        int update = userExamMapper.update(cheatStudent, userExamQueryWrapper);
+        if (update > 0) {
+            return "Confirm cheat";
+        }else return "Error to confirm cheat";
+    }
 }

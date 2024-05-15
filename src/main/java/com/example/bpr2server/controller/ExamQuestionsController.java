@@ -36,4 +36,10 @@ public class ExamQuestionsController {
         String result = examQuestionsService.submitAnswers(studentAnswerList);
         return Result.ok().data("result", result);
     }
+
+    @GetMapping("/status")
+    public Result checkStatus(int userId, int examId) {
+        String status = examQuestionsService.checkStatus(userId, examId);
+        return Result.ok().data("status", status);
+    }
 }

@@ -13,4 +13,5 @@ public interface ExamInfoService {
     String updateExamDetail(ExamInfo examInfo);
     IPage fetchStudents(String username, int page, int limit);
     List<UserExam> fetchUserExamList(int examId);
+    String confirmCheat(int userId, int examId);
 }
